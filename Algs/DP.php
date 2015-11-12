@@ -44,27 +44,43 @@ class DP
     
     public static function runWithoutRecursion($points, $epsilon)
     {
-        $watchdog = 0;
+//        $watchdog = 0;
         $stack = [[0, count($points)-1]];
-//        echo '<pre>';
-        while (!empty($points))
+        
+        while (!empty($stack))
         {
-            if(++$watchdog>1000)
-            {
-                break;
-            }
+            //Just for testing mode
+//            if(++$watchdog>10000)
+//            {
+//                break;
+//            }
+            
             $limits = array_pop($stack);
+            
+            
+            //TODO: Heare  heed check variant if we have 3 points and current 
+            //length more than epsilon not need add new diapasons to stack
             if($limits[1] - $limits[0] < 2)
             {
                 continue;
             }
-//            print_r($limits);
+            
             $keyOfMaxEl = null;
             $maxLength = 0;
             
             for($i = $limits[0] + 1; $i < $limits[1]; $i++)
             {
-                $curentLength = PointsService::minimalLengthToLine($points[$i], $points[$limits[0]], $points[$limits[1]]);
+                // TODO: Need remove repeating calculation on base line point coordinates
+                //possible bad variand becouse same points will happen not very often but comparation happen for all limits
+//                if($points[$limits[0]] === $points[$limits[1]])
+//                {
+//                    //same start and end point can use just distance between 2 points
+//                    $curentLength = PointsService::getDistance2Points($points[$i], $points[$limits[0]]);
+//                }
+//                else
+//                {
+                    $curentLength = PointsService::minimalLengthToLine($points[$i], $points[$limits[0]], $points[$limits[1]]);
+//                }
 
                 if($curentLength > $maxLength)
                 {
@@ -75,36 +91,29 @@ class DP
             
             if($keyOfMaxEl !== null && $maxLength > $epsilon)
             {
-                array_push($stack, [$limits[0], $keyOfMaxEl], [$keyOfMaxEl, $limits[1]]);
+                // TODO: Need experementis 2 [] will work fater than array_push
+//                array_push($stack, [$limits[0], $keyOfMaxEl], [$keyOfMaxEl, $limits[1]]);
+                $stack[] = [$limits[0], $keyOfMaxEl];
+                $stack[] = [$keyOfMaxEl, $limits[1]];
             }
             else
             {
-//                echo '<pre>';
-//                
-//                print_r($stack);
-//                
-//                print_r([$limits[0]+1, $limits[1] - $limits[0] - 1]);
-//                
-//                print_r([$limits[0] , $limits[1]]);
                 
+                //TODO:  Need replace to unset It will work ~10% faster. 
+                //Maybe not need becouse it will be lot operations exept one function call
                 array_splice($points, $limits[0] + 1, $limits[1] - $limits[0] - 1, 0);
                 
-//                print_r($points);
-//                
-//                echo '</pre>';die();
             }
             
-//            die();
+
         }
-//        echo '</pre>';
-        
         $result = [];
         
         foreach($points as $point)
         {
             if($point !== 0)
             {
-                $resultp[] = $point;
+                $result[] = $point;
             }
         }
         
