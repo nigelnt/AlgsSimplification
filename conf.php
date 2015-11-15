@@ -5,3 +5,4 @@ include 'Point/PointsService.php';
 include 'Point/PointsHelper.php';
 include 'Image/Image.php';
 include 'Algs/DP.php';
+include 'Algs/VW.php';

@@ -5,6 +5,7 @@ namespace TestAlg;
 use \TestAlg\Points\Helper as PointsHelper;
 use \TestAlg\Image\Image;
 use \TestAlg\Algs\DP;
+use \TestAlg\Algs\VW;
 
 include 'conf.php';
 //[[width,height],....]
@@ -23,26 +24,34 @@ $src_r0 = PointsHelper::multiplicateCoordinatesArray($src0, 4);
 $resPoints0 = DP::run(PointsHelper::fromArrayToPoints($src_r0), $sigmaSquare);
 
 
-
+//echo '<pre>';
 $src_r1 = PointsHelper::multiplicateCoordinatesArray($src1, 4);
-$resPoints1 = DP::run(PointsHelper::fromArrayToPoints($src_r1), $sigmaSquare);
+$src_points = PointsHelper::fromArrayToPoints($src_r1);
+$resPoints1 = DP::run($src_points, $sigmaSquare);
+$resPoints1_1 = VW::run($src_points, count($src_points) - count($resPoints1));
 
-
+//echo "count 1: ".count($resPoints1).PHP_EOL;
+//print_r($resPoints1);
+//echo "count 2: ".count($resPoints1_1).PHP_EOL;
+//
+//print_r($resPoints1_1);
+//die();
 $src_r2 = PointsHelper::multiplicateCoordinatesArray($src2, 4);
 $resPoints2 = DP::runWithoutRecursion(PointsHelper::fromArrayToPoints($src_r2), $sigmaSquare);
 //$resPoints2 = DP::run(PointsHelper::fromArrayToPoints($src_r2), $sigmaSquare);
 
 $image = new Image();
 $image
-    ->addPoints(PointsHelper::fromPointsToArray($resPoints0), Image::RED)
-    ->addPoints($src_r0, Image::GREEN)
+//    ->addPoints(PointsHelper::fromPointsToArray($resPoints0), Image::RED)
+//    ->addPoints($src_r0, Image::GREEN)
 //        
-//    ->addPoints(PointsHelper::fromPointsToArray($resPoints1), Image::YELLOW)
-//    ->addPoints($src_r1, Image::BLUE)
+    ->addPoints(PointsHelper::fromPointsToArray($resPoints1), Image::YELLOW)
+    ->addPoints(PointsHelper::fromPointsToArray($resPoints1_1), Image::RED)
+    ->addPoints($src_r1, Image::BLUE)
         
 //    ->addPoints(PointsHelper::fromPointsToArray($resPoints2), 'one')
 //    ->addPoints($src_r2, 'two')
-    ->printImage();
-
+    ->printImage()
+;
 
 

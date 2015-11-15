@@ -119,5 +119,28 @@ class PointsService
                     2
                 );
     }
+   
+    
+    public static function getAreaTriangle(Point $pointA, Point $pointB, Point $pointC)
+    {
+        
+        return abs(
+                    (
+                        $pointA->getX() * (
+                            $pointB->getY() -
+                            $pointC->getY()
+                        ) +
+                        $pointB->getX() * (
+                            $pointC->getY() -
+                            $pointA->getY()
+                        ) +
+                        $pointC->getX() * (
+                            $pointA->getY() -
+                            $pointB->getY()
+                        )
+                    ) / 
+                    2
+                );
+    }
 }
 
