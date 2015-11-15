@@ -31,9 +31,12 @@ class DP
         {
             $result = self::run(array_slice($points, 0, $keyOfMaxEl + 1), $epsilonSquare);
             $tmpPoints  = self::run(array_slice($points, $keyOfMaxEl), $epsilonSquare);
-            foreach ($tmpPoints as $point)
+            foreach ($tmpPoints as $key => $point)
             {
-                array_push($result, $point);
+                if($key)
+                {
+                    array_push($result, $point);
+                }
             }
 
             return $result;
