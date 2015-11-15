@@ -23,19 +23,12 @@ $sigmaSquare = pow(isset($_GET['sigma'])?$_GET['sigma']:5, 2);
 $src_r0 = PointsHelper::multiplicateCoordinatesArray($src0, 4);
 $resPoints0 = DP::run(PointsHelper::fromArrayToPoints($src_r0), $sigmaSquare);
 
-
-//echo '<pre>';
 $src_r1 = PointsHelper::multiplicateCoordinatesArray($src1, 4);
 $src_points = PointsHelper::fromArrayToPoints($src_r1);
 $resPoints1 = DP::run($src_points, $sigmaSquare);
 $resPoints1_1 = VW::run($src_points, count($src_points) - count($resPoints1));
 
-//echo "count 1: ".count($resPoints1).PHP_EOL;
-//print_r($resPoints1);
-//echo "count 2: ".count($resPoints1_1).PHP_EOL;
-//
-//print_r($resPoints1_1);
-//die();
+
 $src_r2 = PointsHelper::multiplicateCoordinatesArray($src2, 4);
 $resPoints2 = DP::runWithoutRecursion(PointsHelper::fromArrayToPoints($src_r2), $sigmaSquare);
 //$resPoints2 = DP::run(PointsHelper::fromArrayToPoints($src_r2), $sigmaSquare);
