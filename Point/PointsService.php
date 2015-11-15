@@ -18,9 +18,9 @@ class PointsService
         $tPointB = new Point(self::getXCoordinateForTriangle($point, $linePointA, $linePointB), $point->getY());
 
 
-        $aLength = self::getDistance2Points($tPointA, $tPointB);
-        $bLength = self::getDistance2Points($point, $tPointB);
-        $cLength = self::getDistance2Points($point, $tPointA);
+        $aLength = self::getSquareDistance2Points($tPointA, $tPointB);
+        $bLength = self::getSquareDistance2Points($point, $tPointB);
+        $cLength = self::getSquareDistance2Points($point, $tPointA);
 
         // for paralel to coordinate lines 
         if($aLength === $cLength || $aLength === $bLength)
@@ -108,17 +108,15 @@ class PointsService
                 ) + $linePointA->getY();
     }
 
-    public static function getDistance2Points(Point $pointA, Point $pointB)
+    public static function getSquareDistance2Points(Point $pointA, Point $pointB)
     {
-        return sqrt(
-                    pow(
-                        $pointA->getX() - $pointB->getX(),
-                        2
-                    ) + 
-                    pow(
-                        $pointA->getY() - $pointB->getY(),
-                        2
-                    )
+        return pow(
+                    $pointA->getX() - $pointB->getX(),
+                    2
+                ) + 
+                pow(
+                    $pointA->getY() - $pointB->getY(),
+                    2
                 );
     }
 }

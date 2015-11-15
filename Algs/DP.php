@@ -5,7 +5,7 @@ use TestAlg\Points\PointsService;
 
 class DP
 {    
-    public static function run($points, $epsilon)
+    public static function run($points, $epsilonSquare)
     {
         //Need remove recursion and change it to loop
         
@@ -27,10 +27,10 @@ class DP
             }
         }
 
-        if($keyOfMaxEl !== null && $maxLength > $epsilon)
+        if($keyOfMaxEl !== null && $maxLength > $epsilonSquare)
         {
-            $result = self::run(array_slice($points, 0, $keyOfMaxEl + 1), $epsilon);
-            $tmpPoints  = self::run(array_slice($points, $keyOfMaxEl), $epsilon);
+            $result = self::run(array_slice($points, 0, $keyOfMaxEl + 1), $epsilonSquare);
+            $tmpPoints  = self::run(array_slice($points, $keyOfMaxEl), $epsilonSquare);
             foreach ($tmpPoints as $point)
             {
                 array_push($result, $point);
@@ -42,7 +42,7 @@ class DP
         return [$points[0], $points[count($points)-1]];
     }
     
-    public static function runWithoutRecursion($points, $epsilon)
+    public static function runWithoutRecursion($points, $epsilonSquare)
     {
 //        $watchdog = 0;
         $stack = [[0, count($points)-1]];
@@ -89,7 +89,7 @@ class DP
                 }
             }
             
-            if($keyOfMaxEl !== null && $maxLength > $epsilon)
+            if($keyOfMaxEl !== null && $maxLength > $epsilonSquare)
             {
                 // TODO: Need experementis 2 [] will work fater than array_push
 //                array_push($stack, [$limits[0], $keyOfMaxEl], [$keyOfMaxEl, $limits[1]]);
