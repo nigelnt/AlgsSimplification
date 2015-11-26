@@ -8,6 +8,8 @@ class Image
     private $imgHeight = 300;
     
     private $colors = [];
+    
+    private $image;
 
 
     //['red'=>[[width, height], ...], ...]
@@ -22,7 +24,7 @@ class Image
     public function __construct() {
         return $this;
     }
-    
+
     function addPoints($src, $color)
     {
         $this->points[$color] = [];
@@ -47,22 +49,22 @@ class Image
     public function printImage()
     {
         header ('Content-Type: image/png');
-        $image = @imagecreatetruecolor($this->imgWidth, $this->imgHeight) or die('Unable to allocate GD stream');
-        $this->paintLines($image);
-        imagepng($image);
-        imagedestroy($image);
+        $this -> image = @imagecreatetruecolor($this->imgWidth, $this->imgHeight) or die('Unable to allocate GD stream');
+        $this -> paintLines();
+        imagepng($this -> image);
+        imagedestroy($this -> image);
     }
     
-    private function paintLines($image)
+    private function paintLines()
     {
         foreach ($this->points as $color=>$src)
         {
-            $resColor = $this->generateColor($image, $color);
-            $this->addColorLine($image, $src, $resColor);
+            $resColor = $this->generateColor($color);
+            $this->addColorLine($src, $resColor);
         }
     }
     
-    private function addColorLine($image, $points, $color)
+    private function addColorLine($points, $color)
     {
         foreach($points as $key=>$point)
         {
@@ -70,7 +72,7 @@ class Image
             {
                 $nextPoint = $points[$key + 1];
                 imageline(
-                    $image, 
+                    $this -> image, 
                     $point[0], 
                     $this->imgHeight - $point[1], 
                     $nextPoint[0], 
@@ -82,29 +84,30 @@ class Image
         }
     }
     
-    private function generateColor($image, $color)
+    private function generateColor($color)
     {
         if(array_key_exists($color, $this->colors))
         {
             return $this->colors[$color];
+            $this->colors[$color] = imagecolorallocate ($this -> $image, $R, $G, $B);
         }
         
-        switch ($color)
-        {
-            case self::RED:
-                    $this->colors[$color] = imagecolorallocate ($image, 255, 0, 0);
-                break;
-            case self::GREEN:
-                    $this->colors[$color] = imagecolorallocate ($image, 0, 255, 0);
-                break;
-            case self::YELLOW:
-                    $this->colors[$color] = imagecolorallocate ($image, 255, 254, 0);
-                break;
-            case self::BLUE:                    
-                    $this->colors[$color] = imagecolorallocate ($image, 0, 0, 255);
-                break;
-            default :                  
-                    $this->colors[$color] = imagecolorallocate ($image, rand(50,200), rand(50,200), rand(50,200));
+		switch ($color)
+		{
+			case self::RED:
+					$this->colors[$color] = imagecolorallocate ($this -> image, 255, 0, 0);
+				break;
+			case self::GREEN:
+					$this->colors[$color] = imagecolorallocate ($this -> image, 0, 255, 0);
+				break;
+			case self::YELLOW:
+					$this->colors[$color] = imagecolorallocate ($this -> image, 255, 255, 0);
+				break;
+			case self::BLUE:                    
+					$this->colors[$color] = imagecolorallocate ($this -> image, 0, 0, 255);
+				break;
+			default :                  
+					$this->colors[$color] = imagecolorallocate ($this -> image, rand(50,200), rand(50,200), rand(50,200));
         }
         
         return $this->colors[$color];
