@@ -19,36 +19,23 @@ $src4 = [[-9063594.08989,3352185.86307],[-9063504.92297,3351558.37065],[-9063413
 
 //==========================================================================================
 
-$sigmaSquare = pow(isset($_GET['sigma'])?$_GET['sigma']:5, 2);
-$src_r0 = PointsHelper::multiplicateCoordinatesArray($src0, 4);
-$resPoints0 = DP::run(PointsHelper::fromArrayToPoints($src_r0), $sigmaSquare);
+$sigmaSquare = pow(isset($_REQUEST['sigma'])?$_REQUEST['sigma']:5, 2);
 
-$src_r1 = PointsHelper::multiplicateCoordinatesArray($src1, 4);
-$src_points = PointsHelper::fromArrayToPoints($src_r1);
-$resPoints1 = DP::run($src_points, $sigmaSquare);
-$resPoints1_1 = VW::run($src_points, count($src_points) - count($resPoints1));
+$src_array = isset($_REQUEST['src']) ? 'src'.$_REQUEST['src'] : 'src0';
+$src = isset($$src_array) ? $$src_array : $src0;
 
-
-//print "<pre>";
-//print_r($resPoints1);
-//print_r($resPoints1_1);
-
-$src_r2 = PointsHelper::multiplicateCoordinatesArray($src2, 4);
-$resPoints2 = DP::runWithoutRecursion(PointsHelper::fromArrayToPoints($src_r2), $sigmaSquare);
-//$resPoints2 = DP::run(PointsHelper::fromArrayToPoints($src_r2), $sigmaSquare);
+$src_array = PointsHelper::multiplicateCoordinatesArray($src, 4);
+$src_points = PointsHelper::fromArrayToPoints($src_array);
+$DP_points = DP::run($src_points, $sigmaSquare);
+$VW_points = VW::run($src_points, count($src_points) - count($resPoints1));
+$DP_points2 = DP::runWithoutRecursion($src_points, $sigmaSquare);
 
 $image = new Image();
 $image
-//    ->addPoints(PointsHelper::fromPointsToArray($resPoints0), Image::RED)
-//    ->addPoints($src_r0, Image::GREEN)
-//        
-    ->addPoints(PointsHelper::fromPointsToArray($resPoints1), Image::YELLOW)
-    ->addPoints(PointsHelper::fromPointsToArray($resPoints1_1), Image::RED)
-    ->addPoints($src_r1, Image::BLUE)
-        
-//    ->addPoints(PointsHelper::fromPointsToArray($resPoints2), 'one')
-//    ->addPoints($src_r2, 'two')
+    ->addPoints(PointsHelper::fromPointsToArray($VW_points), Image::YELLOW)
+    ->addPoints(PointsHelper::fromPointsToArray($DP_points), Image::RED)
+    ->addPoints(PointsHelper::fromPointsToArray($DP_points2), Image::GREEN)
+    ->addPoints($src_array, Image::BLUE)
+    
     ->printImage()
 ;
-
-
